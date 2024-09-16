@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avito-backend-trainee-assignment-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: avito-backend-trainee-assignment
+  template:
+    metadata:
+      labels:
+        app: avito-backend-trainee-assignment
+    spec:
+      containers:
+        - name: avito-backend-trainee-assignment
+          image: registry.example.com/project/avito-backend-trainee-assignment:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: avito-backend-trainee-assignment-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+  selector:
+    app: avito-backend-trainee-assignment

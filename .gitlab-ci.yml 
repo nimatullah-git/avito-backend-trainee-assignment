@@ -1,0 +1,22 @@
+image: maven:3.8.1-jdk-11
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - ./gradlew clean build
+  artifacts:
+    paths:
+      - build/libs/*.jar
+
+deploy:
+  stage: deploy
+  script:
+    - docker build -t registry.example.com/project/avito-backend-trainee-assignment:$CI_COMMIT_REF_SLUG .
+    - docker push registry.example.com/project/avito-backend-trainee-assignment:$CI_COMMIT_REF_SLUG
+    - kubectl apply -f kubernetes-deployment.yaml
+  only:
+    - main
